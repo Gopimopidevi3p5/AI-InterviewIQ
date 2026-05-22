@@ -4,7 +4,7 @@ dotenv.config();
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-
+import authRoute from "./routes/auth.js";
 
 const app = express();
 
@@ -20,6 +20,7 @@ mongoose
     console.log(err.message);
   });
 
+app.use("/auth", authRoute);
 const port = process.env.port;
 app.listen(port, () => {
   console.log(`server running on port ${port}`);
