@@ -1,5 +1,9 @@
+import dns from "node:dns"; // or const dns = require('node:dns');
+
+// Overrides the broken internal v24 resolver
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config();    
 
 import express from "express";
 import mongoose from "mongoose";
@@ -21,7 +25,8 @@ mongoose
   });
 
 app.use("/auth", authRoute);
-const port = process.env.port;
+
+const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`server running on port ${port}`);
 });
