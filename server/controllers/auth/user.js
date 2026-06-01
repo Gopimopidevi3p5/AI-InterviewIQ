@@ -41,26 +41,25 @@ export const login = async (req, res) => {
     }
     //verify email is exists in user
     const user = await User.findOne({ email });
-    console.log(user);
+
     if (!user) {
       return res.status(404).json({ message: "user does not exists" });
     }
+    console.log("executing before compare");
     //verify password using bcrypt
     const match = await bcrypt.compare(password, user.password);
+
     if (!match) {
       return res.status(400).json({ message: "Incorrect password" });
     }
+    console.log(match, "match", user);
     //return res.status(200).json({ message: "logged in" });
     //Generate jwt token
     const token = generateJwtToken({ email: user.email, id: user._id });
-    const userDetails = {
-      name: user.name,
-      age: user.age || 0,
-      phone: user.phone,
-      email: user.email,
-    };
+    // console.log(token,'before userDetails',user.name,user.age,user.phone.user.email)
+
     //Send response token
-    res.status(200).json({ message: "ok", userDetails, token });
+    res.status(200).json({ message: "ok", user, token });
   } catch (error) {
     res.status(500).json({ message: error });
   }

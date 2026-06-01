@@ -3,6 +3,7 @@ import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RxEyeClosed, RxEyeOpen } from "react-icons/rx";
+import { Link, useNavigate } from "react-router-dom";
 
 function Signup() {
   const [formValues, setFormValues] = useState({
@@ -13,7 +14,7 @@ function Signup() {
     password: "",
     confirmPassword: "",
   });
-
+  const navigate = useNavigate();
   // 👁️ Toggle state for both password fields
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -45,15 +46,17 @@ function Signup() {
       }
       const userData = { ...formValues };
       delete userData.confirmPassword;
+      console.log(userData);
       const data = await axios.post(
         "http://localhost:4000/auth/signup",
         userData,
       );
       console.log(data.data, "data from signup");
       toast.success("Account created successfully!");
+      navigate("/login");
     } catch (error) {
       console.log(error.message);
-      toast.error("Signup failed. Please try again.");
+      toast.error(error?.response?.data?.message);
     }
   }
 
@@ -63,7 +66,7 @@ function Signup() {
   const labelClass = "block text-sm font-medium text-gray-700 mb-1";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex justify-center items-center p-4">
+    <div className="h-screen w-full bg-gradient-to-br from-blue-50 to-indigo-100 flex justify-center items-center p-4">
       <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
         {/* Header */}
         <h2 className="text-3xl font-bold text-center text-indigo-600 mb-2">
@@ -208,12 +211,12 @@ function Signup() {
 
           <p className="text-center text-sm text-gray-500">
             Already have an account?{" "}
-            <a
-              href="/login"
+            <Link
+              to="/login"
               className="text-indigo-600 hover:underline font-medium"
             >
               Log in
-            </a>
+            </Link>
           </p>
         </form>
       </div>
